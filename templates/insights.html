@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ColonyMind AI | Smart Insights</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .insights-page {
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .insights-header {
+            margin-bottom: 30px;
+        }
+
+        .insights-eyebrow {
+            color: #7657f5;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            margin-bottom: 8px;
+        }
+
+        .insights-header h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: -1px;
+        }
+
+        .insights-header p {
+            margin: 9px 0 0;
+            color: #777b87;
+            font-size: 15px;
+        }
+
+        /* STAT CARDS */
+
+        .insight-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .insight-stat {
+            background: white;
+            border: 1px solid #e8e8ef;
+            border-radius: 18px;
+            padding: 21px;
+            box-shadow: 0 10px 30px rgba(20,20,40,.04);
+        }
+
+        .insight-stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .insight-stat-top span {
+            font-size: 13px;
+            color: #777b87;
+        }
+
+        .insight-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: #f0edff;
+            color: #7657f5;
+            font-weight: 700;
+        }
+
+        .insight-stat h2 {
+            margin: 15px 0 4px;
+            font-size: 30px;
+        }
+
+        .insight-stat small {
+            color: #9699a3;
+            font-size: 11px;
+        }
+
+        /* GRID */
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: 1.25fr .75fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .insight-card {
+            background: white;
+            border: 1px solid #e8e8ef;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(20,20,40,.04);
+        }
+
+        .insight-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 22px;
+        }
+
+        .insight-card-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .insight-card-header p {
+            margin: 5px 0 0;
+            color: #8a8d97;
+            font-size: 12px;
+        }
+
+        .live-badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eefaf3;
+            color: #32a566;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* STATUS BARS */
+
+        .status-row {
+            margin-bottom: 19px;
+        }
+
+        .status-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: 13px;
+        }
+
+        .status-info span:last-child {
+            font-weight: 700;
+        }
+
+        .bar {
+            height: 9px;
+            background: #f0f0f4;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: inherit;
+        }
+
+        .pending-fill {
+            width: {{ pending_percent }}%;
+            background: #f2a33b;
+        }
+
+        .progress-fill {
+            width: {{ progress_percent }}%;
+            background: #6c8df6;
+        }
+
+        .resolved-fill {
+            width: {{ resolved_percent }}%;
+            background: #45b77b;
+        }
+
+        /* RESOLUTION */
+
+        .resolution-box {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .circle {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background:
+                conic-gradient(
+                    #7657f5 {{ resolution_rate }}%,
+                    #eeeeF4 0
+                );
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .circle::after {
+            content: "";
+            position: absolute;
+            width: 91px;
+            height: 91px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .circle strong {
+            position: relative;
+            z-index: 2;
+            font-size: 25px;
+        }
+
+        .resolution-text h3 {
+            margin: 0 0 7px;
+            font-size: 17px;
+        }
+
+        .resolution-text p {
+            margin: 0;
+            color: #81848e;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* LOCATIONS */
+
+        .location-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .location-item {
+            display: grid;
+            grid-template-columns: 34px 1fr auto;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .location-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #f1efff;
+            color: #7657f5;
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+        }
+
+        .location-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .location-track {
+            height: 6px;
+            background: #f0f0f4;
+            border-radius: 20px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .location-track div {
+            height: 100%;
+            background: #7657f5;
+            border-radius: inherit;
+        }
+
+        .location-count {
+            font-size: 12px;
+            color: #777b87;
+        }
+
+        /* AI INSIGHT */
+
+        .ai-insight {
+            background: linear-gradient(135deg, #19182b, #282447);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-insight::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(124,92,255,.18);
+            right: -80px;
+            top: -100px;
+            filter: blur(5px);
+        }
+
+        .ai-insight .insight-card-header {
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-label {
+            color: #a99aff;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .ai-insight h2 {
+            margin: 5px 0 10px;
+            font-size: 23px;
+        }
+
+        .ai-insight p {
+            color: #c5c2d4;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .ai-points {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+            margin-top: 20px;
+        }
+
+        .ai-point {
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,.09);
+            background: rgba(255,255,255,.05);
+            border-radius: 12px;
+            font-size: 12px;
+            color: #dedbea;
+        }
+
+        .ai-point strong {
+            color: white;
+        }
+
+        .ai-action {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 16px;
+            border-radius: 11px;
+            background: white;
+            color: #262239;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* EMPTY */
+
+        .empty-insight {
+            text-align: center;
+            padding: 35px 15px;
+            color: #858894;
+        }
+
+        .empty-insight strong {
+            display: block;
+            color: #363842;
+            margin-bottom: 6px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .insight-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .insight-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .insights-header h1 {
+                font-size: 28px;
+            }
+
+            .resolution-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-mark">C</div>
+            <span>ColonyMind AI</span>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-title">MAIN</p>
+
+            <a href="/dashboard" class="menu-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/report" class="menu-item">
+                <span>＋</span>
+                Report Issue
+            </a>
+
+            <a href="#" class="menu-item">
+                <span>◉</span>
+                Community
+            </a>
+
+            <p class="menu-title">TOOLS</p>
+
+            <a href="/ai-assistant" class="menu-item">
+                <span>✦</span>
+                AI Assistant
+            </a>
+
+            <a href="/insights" class="menu-item active">
+                <span>◌</span>
+                Insights
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+
+                <div class="avatar">P</div>
+
+                <div>
+                    <strong>Community Admin</strong>
+                    <small>Colony Manager</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <div class="insights-page">
+
+            <!-- HEADER -->
+
+            <div class="insights-header">
+
+                <div class="insights-eyebrow">
+                    COMMUNITY INTELLIGENCE
+                </div>
+
+                <h1>Smart Insights</h1>
+
+                <p>
+                    Understand patterns and trends across your community.
+                </p>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <section class="insight-stats">
+
+                <div class="insight-stat">
+
+                    <div class="insight-stat-top">
+                        <span>Total Issues</span>
+                        <div class="insight-icon">◎</div>
+                    </div>
+
+                    <h2>{{ total }}</h2>
+
+                    <small>All reported issues</small>
+
+                </div>
+
+
+                <div class="insight-stat">
+
+                    <div class="insight-stat-top">
+                        <span>Pending</span>
+                        <div class="insight-icon">◷</div>
+                    </div>
+
+                    <h2>{{ pending }}</h2>
+
+                    <small>Waiting for action</small>
+
+                </div>
+
+
+                <div class="insight-stat">
+
+                    <div class="insight-stat-top">
+                        <span>In Progress</span>
+                        <div class="insight-icon">↻</div>
+                    </div>
+
+                    <h2>{{ progress }}</h2>
+
+                    <small>Currently being handled</small>
+
+                </div>
+
+
+                <div class="insight-stat">
+
+                    <div class="insight-stat-top">
+                        <span>Resolved</span>
+                        <div class="insight-icon">✓</div>
+                    </div>
+
+                    <h2>{{ resolved }}</h2>
+
+                    <small>Successfully completed</small>
+
+                </div>
+
+            </section>
+
+
+            <!-- MAIN INSIGHT GRID -->
+
+            <section class="insight-grid">
+
+
+                <!-- STATUS ANALYSIS -->
+
+                <div class="insight-card">
+
+                    <div class="insight-card-header">
+
+                        <div>
+                            <h2>Issue Status</h2>
+                            <p>Current distribution of community reports</p>
+                        </div>
+
+                        <span class="live-badge">
+                            LIVE DATA
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-info">
+                            <span>Pending</span>
+                            <span>{{ pending }}</span>
+                        </div>
+
+                        <div class="bar">
+                            <div class="bar-fill pending-fill"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-info">
+                            <span>In Progress</span>
+                            <span>{{ progress }}</span>
+                        </div>
+
+                        <div class="bar">
+                            <div class="bar-fill progress-fill"></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-row">
+
+                        <div class="status-info">
+                            <span>Resolved</span>
+                            <span>{{ resolved }}</span>
+                        </div>
+
+                        <div class="bar">
+                            <div class="bar-fill resolved-fill"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESOLUTION RATE -->
+
+                <div class="insight-card">
+
+                    <div class="insight-card-header">
+
+                        <div>
+                            <h2>Resolution Rate</h2>
+                            <p>Issues successfully completed</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="resolution-box">
+
+                        <div class="circle">
+
+                            <strong>
+                                {{ resolution_rate }}%
+                            </strong>
+
+                        </div>
+
+                        <div class="resolution-text">
+
+                            <h3>
+                                Community progress
+                            </h3>
+
+                            <p>
+                                {{ resolved }} of {{ total }}
+                                reported issues have been resolved.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SECOND GRID -->
+
+            <section class="insight-grid">
+
+
+                <!-- LOCATIONS -->
+
+                <div class="insight-card">
+
+                    <div class="insight-card-header">
+
+                        <div>
+                            <h2>Issue Hotspots</h2>
+                            <p>Locations with the highest number of reports</p>
+                        </div>
+
+                    </div>
+
+
+                    {% if locations %}
+
+                    <div class="location-list">
+
+                        {% for location, count in locations %}
+
+                        <div class="location-item">
+
+                            <div class="location-icon">
+                                ◉
+                            </div>
+
+                            <div>
+
+                                <div class="location-name">
+                                    {{ location }}
+                                </div>
+
+                                <div class="location-track">
+
+                                    <div style="width: {{ location_percentages[loop.index0] }}%;"></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="location-count">
+                                {{ count }}
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="empty-insight">
+
+                        <strong>No location data yet</strong>
+
+                        Report community issues to start generating insights.
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- AI INSIGHT -->
+
+                <div class="insight-card ai-insight">
+
+                    <div class="insight-card-header">
+
+                        <div>
+
+                            <div class="ai-label">
+                                COLONYMIND AI
+                            </div>
+
+                            <h2>Community Intelligence</h2>
+
+                            <p>
+                                A quick interpretation of your current
+                                community activity.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="ai-points">
+
+                        <div class="ai-point">
+                            <strong>{{ total }}</strong>
+                            total community reports are currently recorded.
+                        </div>
+
+                        <div class="ai-point">
+                            <strong>{{ pending }}</strong>
+                            issues are waiting for action.
+                        </div>
+
+                        <div class="ai-point">
+                            <strong>{{ resolution_rate }}%</strong>
+                            of reported issues have been resolved.
+                        </div>
+
+                    </div>
+
+
+                    <a href="/ai-assistant" class="ai-action">
+                        Ask ColonyMind AI →
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ColonyMind AI | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-mark">C</div>
+            <span>ColonyMind AI</span>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-title">MAIN</p>
+
+            <a href="/dashboard" class="menu-item active">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/report" class="menu-item">
+                <span>＋</span>
+                Report Issue
+            </a>
+
+            <a href="/community" class="menu-item">
+    <span>◉</span>
+    Community
+</a>
+
+            <p class="menu-title">TOOLS</p>
+
+            <a href="/ai-assistant" class="menu-item">
+                <span>✦</span>
+                AI Assistant
+            </a>
+
+           <a href="/insights" class="menu-item">
+    <span>◌</span>
+    Insights
+</a>
+
+        </div>
+
+        <!-- DYNAMIC PROFILE + LOGOUT -->
+        <div class="sidebar-bottom">
+
+            {% set display_name = session.get('username', 'Community Admin') %}
+
+            <div class="profile-mini">
+
+                <div class="avatar">
+                    {{ display_name[0]|upper }}
+                </div>
+
+                <div class="profile-info">
+                    <strong>{{ display_name }}</strong>
+                    <small>Colony Manager</small>
+                </div>
+
+                <a href="/logout"
+                   class="logout-btn"
+                   title="Logout"
+                   aria-label="Logout">
+                    ↪
+                </a>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <p class="welcome-text">GOOD EVENING</p>
+
+                <h1>Community Overview</h1>
+
+                <p class="topbar-subtitle">
+                    Monitor and manage your community in one place.
+                </p>
+            </div>
+
+            <a href="/report" class="primary-btn">
+                + Report Issue
+            </a>
+
+        </header>
+
+
+        <!-- STATS -->
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span>Total Issues</span>
+                    <div class="stat-icon">◎</div>
+                </div>
+
+                <h2>{{ total }}</h2>
+
+                <p class="stat-description">
+                    All reported community issues
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span>Pending</span>
+                    <div class="stat-icon">◷</div>
+                </div>
+
+                <h2>{{ pending }}</h2>
+
+                <p class="stat-description">
+                    Waiting for action
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span>In Progress</span>
+                    <div class="stat-icon">↻</div>
+                </div>
+
+                <h2>{{ progress }}</h2>
+
+                <p class="stat-description">
+                    Currently being handled
+                </p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+                    <span>Resolved</span>
+                    <div class="stat-icon">✓</div>
+                </div>
+
+                <h2>{{ resolved }}</h2>
+
+                <p class="stat-description">
+                    Successfully completed
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTENT GRID -->
+        <section class="dashboard-grid">
+
+
+            <!-- RECENT ISSUES -->
+            <div class="panel issues-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Recent Issues</h2>
+                        <p>Latest community reports</p>
+                    </div>
+
+                    <span class="view-label">
+                        ● Live
+                    </span>
+
+                </div>
+                
+                
+<!-- ISSUE SEARCH AND FILTERS -->
+<div class="issue-filters">
+    <input
+        type="search"
+        id="issueSearch"
+        placeholder="Search by title or location..."
+    >
+
+    <select id="statusFilter">
+        <option value="all">All Statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+    </select>
+
+    <select id="priorityFilter">
+        <option value="all">All Priorities</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+        <option value="Critical">Critical</option>
+    </select>
+</div>
+
+                {% if issues %}
+
+                    {% for issue in issues %}
+
+                    <div class="issue-row">
+
+                        <div class="issue-main">
+
+                            <div class="issue-icon">
+                                !
+                            </div>
+
+                            <div class="issue-content">
+
+    <h3>{{ issue["title"] }}</h3>
+
+    <span class="priority-badge priority-{{ (issue['priority'] or 'Medium')|lower }}">
+    {{ issue['priority'] or 'Medium' }}
+</span>
+    <p>
+        <strong>{{ issue["location"] }}</strong>
+        · {{ issue["description"] }}
+    </p>
+
+    <small class="issue-id">
+        Issue #{{ issue["id"] }}
+    </small>
+
+</div>
+
+                        </div>
+
+
+                        <div class="issue-actions">
+
+                            <!-- STATUS -->
+                            <form
+                                action="/update-status/{{ issue['id'] }}"
+                                method="POST"
+                                class="status-form"
+                            >
+
+                                <select
+                                    name="status"
+                                    onchange="this.form.submit()"
+                                    class="status-select"
+                                >
+
+                                    <option
+                                        value="Pending"
+                                        {% if issue["status"] == "Pending" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Pending
+                                    </option>
+
+                                    <option
+                                        value="In Progress"
+                                        {% if issue["status"] == "In Progress" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        In Progress
+                                    </option>
+
+                                    <option
+                                        value="Resolved"
+                                        {% if issue["status"] == "Resolved" %}
+                                        selected
+                                        {% endif %}
+                                    >
+                                        Resolved
+                                    </option>
+
+                                </select>
+
+                            </form>
+
+
+                            <!-- DELETE -->
+                            <form
+                                action="/delete-issue/{{ issue['id'] }}"
+                                method="POST"
+                                onsubmit="return confirm('Delete this issue?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="delete-btn"
+                                    title="Delete issue"
+                                >
+                                    ×
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">✓</div>
+
+                        <h3>No issues yet</h3>
+
+                        <p>
+                            Your community has no reported issues.
+                        </p>
+
+                        <a href="/report" class="secondary-btn">
+                            Report First Issue →
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- AI CARD -->
+            <div class="panel ai-panel">
+
+                <div class="ai-symbol">
+                    ✦
+                </div>
+
+                <p class="ai-label">
+                    COLONYMIND AI
+                </p>
+
+                <h2>
+                    Your community,
+                    <br>
+                    understood.
+                </h2>
+
+                <p>
+                    AI-powered insights can help identify
+                    recurring problems and suggest smarter
+                    ways to manage your community.
+                </p>
+
+                <a href="/ai-assistant" class="secondary-btn">
+                    Open AI Assistant →
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const search = document.getElementById("issueSearch");
+    const statusFilter = document.getElementById("statusFilter");
+    const priorityFilter = document.getElementById("priorityFilter");
+
+    if (!search || !statusFilter || !priorityFilter) return;
+
+    const rows = document.querySelectorAll(".issue-row");
+
+    function applyFilters() {
+        const query = search.value.toLowerCase();
+        const selectedStatus = statusFilter.value;
+        const selectedPriority = priorityFilter.value;
+
+        rows.forEach(function (row) {
+            const text = row.textContent.toLowerCase();
+            const status = row.querySelector(".status-select")?.value;
+            const badge = row.querySelector(".priority-badge");
+            const priority = badge
+                ? badge.textContent.trim()
+                : "Medium";
+
+            const matchesText = text.includes(query);
+            const matchesStatus =
+                selectedStatus === "all" ||
+                status === selectedStatus;
+            const matchesPriority =
+                selectedPriority === "all" ||
+                priority === selectedPriority;
+
+            row.style.display =
+                matchesText && matchesStatus && matchesPriority
+                    ? ""
+                    : "none";
+        });
+    }
+
+    search.addEventListener("input", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
+    priorityFilter.addEventListener("change", applyFilters);
+});
+</script>
+
+</body>
+</html>

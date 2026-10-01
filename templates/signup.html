@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up | ColonyMind AI</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            font-family: Arial, sans-serif;
+            background: #f6f5fb;
+        }
+
+        .auth-card {
+            width: min(440px, 92%);
+            background: white;
+            padding: 34px;
+            border-radius: 22px;
+            box-shadow: 0 20px 60px rgba(20,20,40,.09);
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: #7657f5;
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            color: #858894;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 14px 0 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dddde6;
+            border-radius: 11px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #7657f5;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 13px;
+            border: 0;
+            border-radius: 11px;
+            background: #7657f5;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #c44;
+            padding: 10px;
+            border-radius: 9px;
+            font-size: 12px;
+        }
+
+        .bottom {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        a {
+            color: #7657f5;
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="auth-card">
+
+    <div class="logo">C</div>
+
+    <h1>Create your account</h1>
+
+    <div class="subtitle">
+        Join your community on ColonyMind AI.
+    </div>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+
+        <label>Full Name</label>
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Your name"
+            required
+        >
+
+        <label>Email</label>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            required
+        >
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="At least 6 characters"
+            minlength="6"
+            required
+        >
+
+        <label>Confirm Password</label>
+
+        <input
+            type="password"
+            name="confirm_password"
+            placeholder="Repeat your password"
+            minlength="6"
+            required
+        >
+
+        <button type="submit">
+            Create Account →
+        </button>
+
+    </form>
+
+    <div class="bottom">
+        Already have an account?
+        <a href="/login">Sign in</a>
+    </div>
+
+</div>
+
+</body>
+</html>

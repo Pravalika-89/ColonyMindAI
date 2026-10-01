@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ColonyMind AI | Intelligent Community Management</title>
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="landing-nav">
+
+    <div class="brand">
+        <div class="brand-icon">C</div>
+
+        <div>
+            <strong>ColonyMind</strong>
+            <span>AI</span>
+        </div>
+    </div>
+
+
+    <div class="landing-links">
+
+        <a href="#home">Home</a>
+        <a href="#platform">Platform</a>
+        <a href="#features">Features</a>
+
+    </div>
+
+
+    <div class="nav-actions">
+
+        <a href="/dashboard" class="nav-login">
+            Dashboard
+        </a>
+
+        <a href="/report" class="nav-cta">
+            Report an Issue
+            <span>↗</span>
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<main id="home">
+
+<section class="landing-hero">
+
+    <div class="hero-content">
+
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            AI-POWERED COMMUNITY INTELLIGENCE
+        </div>
+
+
+        <h1>
+            Your community.
+            <br>
+
+            <span class="hero-highlight">
+                Smarter by design.
+            </span>
+        </h1>
+
+
+        <p class="hero-description">
+
+            ColonyMind AI transforms everyday community problems
+            into organized, trackable, and actionable insights —
+            helping communities run better with less effort.
+
+        </p>
+
+
+        <div class="hero-actions">
+
+            <a href="/dashboard" class="hero-primary">
+                Explore Dashboard
+                <span>→</span>
+            </a>
+
+            <a href="/report" class="hero-secondary">
+                Report a Community Issue
+            </a>
+
+        </div>
+
+
+        <div class="hero-trust">
+
+            <div class="trust-item">
+                <strong>01</strong>
+                <span>Report</span>
+            </div>
+
+            <div class="trust-line"></div>
+
+            <div class="trust-item">
+                <strong>02</strong>
+                <span>Track</span>
+            </div>
+
+            <div class="trust-line"></div>
+
+            <div class="trust-item">
+                <strong>03</strong>
+                <span>Understand</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HERO VISUAL -->
+
+    <div class="hero-visual">
+
+        <div class="visual-glow"></div>
+
+
+        <div class="dashboard-preview">
+
+            <div class="preview-top">
+
+                <div>
+                    <small>COMMUNITY OVERVIEW</small>
+                    <h3>Good evening, Admin</h3>
+                </div>
+
+                <div class="preview-avatar">
+                    P
+                </div>
+
+            </div>
+
+
+            <div class="preview-stats">
+
+                <div>
+                    <span>Total Issues</span>
+                    <strong>24</strong>
+                </div>
+
+                <div>
+                    <span>In Progress</span>
+                    <strong>08</strong>
+                </div>
+
+                <div>
+                    <span>Resolved</span>
+                    <strong>16</strong>
+                </div>
+
+            </div>
+
+
+            <div class="preview-section">
+
+                <div class="preview-section-head">
+                    <strong>Community Activity</strong>
+                    <span>Live</span>
+                </div>
+
+
+                <div class="activity-item">
+
+                    <div class="activity-icon orange">
+                        !
+                    </div>
+
+                    <div>
+                        <strong>Street light issue</strong>
+                        <small>Main Gate · Pending</small>
+                    </div>
+
+                    <span>2m</span>
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <div class="activity-icon purple">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Water supply request</strong>
+                        <small>Block B · Resolved</small>
+                    </div>
+
+                    <span>18m</span>
+
+                </div>
+
+
+                <div class="activity-item">
+
+                    <div class="activity-icon blue">
+                        ↻
+                    </div>
+
+                    <div>
+                        <strong>Parking concern</strong>
+                        <small>Block C · In Progress</small>
+                    </div>
+
+                    <span>32m</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="ai-mini-card">
+
+                <div class="mini-ai-icon">
+                    ✦
+                </div>
+
+                <div>
+                    <small>COLONYMIND AI</small>
+                    <strong>3 recurring issues detected</strong>
+                </div>
+
+                <span>→</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PLATFORM ================= -->
+
+<section class="platform-section" id="platform">
+
+    <div class="section-label">
+        THE PLATFORM
+    </div>
+
+    <div class="platform-heading">
+
+        <h2>
+            One place to understand
+            <br>
+            what your community needs.
+        </h2>
+
+        <p>
+            From the first report to the final resolution,
+            ColonyMind AI keeps community operations organized,
+            visible, and easier to manage.
+        </p>
+
+    </div>
+
+
+    <div class="process-grid">
+
+        <div class="process-card">
+
+            <span class="process-number">01</span>
+
+            <div class="process-icon">＋</div>
+
+            <h3>Capture</h3>
+
+            <p>
+                Residents and administrators can report
+                community issues with the important details.
+            </p>
+
+        </div>
+
+
+        <div class="process-card">
+
+            <span class="process-number">02</span>
+
+            <div class="process-icon">◫</div>
+
+            <h3>Organize</h3>
+
+            <p>
+                Every request is stored, tracked, and given
+                a clear status from pending to resolved.
+            </p>
+
+        </div>
+
+
+        <div class="process-card featured-process">
+
+            <span class="process-number">03</span>
+
+            <div class="process-icon">✦</div>
+
+            <h3>Understand</h3>
+
+            <p>
+                AI-powered intelligence helps identify patterns
+                and gives administrators a clearer picture.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features-section" id="features">
+
+    <div class="section-label">
+        BUILT FOR REAL COMMUNITIES
+    </div>
+
+    <div class="features-heading">
+
+        <h2>
+            Less chaos.
+            <br>
+            More clarity.
+        </h2>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+        <article class="feature-large">
+
+            <div class="feature-number">01</div>
+
+            <div class="feature-icon">◉</div>
+
+            <h3>Issue Management</h3>
+
+            <p>
+                Turn scattered complaints into structured
+                community requests that can be monitored
+                from one central dashboard.
+            </p>
+
+            <a href="/dashboard">
+                Explore management →
+            </a>
+
+        </article>
+
+
+        <article class="feature-large dark-feature">
+
+            <div class="feature-number">02</div>
+
+            <div class="feature-icon">✦</div>
+
+            <h3>Community Intelligence</h3>
+
+            <p>
+                Ask questions about your community data
+                and get meaningful answers through the
+                ColonyMind AI assistant.
+            </p>
+
+            <a href="/ai-assistant">
+                Meet the AI assistant →
+            </a>
+
+        </article>
+
+
+        <article class="feature-large">
+
+            <div class="feature-number">03</div>
+
+            <div class="feature-icon">◌</div>
+
+            <h3>Smart Insights</h3>
+
+            <p>
+                Discover recurring problems, monitor issue
+                patterns, and turn community activity into
+                useful information.
+            </p>
+
+            <a href="#">
+                View insights →
+            </a>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FINAL CTA ================= -->
+
+<section class="final-cta">
+
+    <div class="cta-glow"></div>
+
+    <div class="cta-content">
+
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            COMMUNITY INTELLIGENCE
+        </div>
+
+        <h2>
+            A better way to
+            <br>
+            manage everyday problems.
+        </h2>
+
+        <p>
+            Start organizing your community with
+            ColonyMind AI.
+        </p>
+
+        <a href="/dashboard" class="hero-primary">
+            Open ColonyMind AI
+            <span>→</span>
+        </a>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="landing-footer">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            C
+        </div>
+
+        <div>
+            <strong>ColonyMind</strong>
+            <span>AI</span>
+        </div>
+
+    </div>
+
+    <p>
+        Intelligent tools for better communities.
+    </p>
+
+    <span>
+        © 2026 ColonyMind AI
+    </span>
+
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ColonyMind AI | Community</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .community-page {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .community-header {
+            margin-bottom: 28px;
+        }
+
+        .community-header small {
+            color: #7657f5;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            font-size: 11px;
+        }
+
+        .community-header h1 {
+            margin: 8px 0 6px;
+            font-size: 34px;
+        }
+
+        .community-header p {
+            margin: 0;
+            color: #858894;
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: 1.5fr .8fr;
+            gap: 20px;
+        }
+
+        .community-card {
+            background: white;
+            border: 1px solid #e8e8ef;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(20,20,40,.04);
+        }
+
+        .community-card h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .community-card-sub {
+            margin: 6px 0 22px;
+            color: #8a8d97;
+            font-size: 12px;
+        }
+
+        .issue-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 16px 0;
+            border-bottom: 1px solid #eeeeF2;
+        }
+
+        .issue-item:last-child {
+            border-bottom: 0;
+        }
+
+        .issue-title {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .issue-location {
+            color: #858894;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .issue-status {
+            white-space: nowrap;
+            height: fit-content;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .pending {
+            background: #fff4df;
+            color: #c98216;
+        }
+
+        .progress {
+            background: #edf2ff;
+            color: #5374d8;
+        }
+
+        .resolved {
+            background: #eaf8f0;
+            color: #32945f;
+        }
+
+        .community-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .community-action {
+            display: block;
+            padding: 15px;
+            border: 1px solid #ececf2;
+            border-radius: 14px;
+            text-decoration: none;
+            color: #292a33;
+            transition: .2s;
+        }
+
+        .community-action:hover {
+            border-color: #7657f5;
+            transform: translateY(-2px);
+        }
+
+        .community-action strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .community-action span {
+            font-size: 11px;
+            color: #858894;
+        }
+
+        .empty-community {
+            text-align: center;
+            padding: 45px 15px;
+            color: #858894;
+        }
+
+        .empty-community strong {
+            display: block;
+            color: #33343d;
+            margin-bottom: 7px;
+        }
+
+        @media (max-width: 850px) {
+            .community-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-mark">C</div>
+            <span>ColonyMind AI</span>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-title">MAIN</p>
+
+            <a href="/dashboard" class="menu-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/report" class="menu-item">
+                <span>＋</span>
+                Report Issue
+            </a>
+
+            <a href="/community" class="menu-item active">
+                <span>◉</span>
+                Community
+            </a>
+
+            <p class="menu-title">TOOLS</p>
+
+            <a href="/ai-assistant" class="menu-item">
+                <span>✦</span>
+                AI Assistant
+            </a>
+
+            <a href="/insights" class="menu-item">
+                <span>◌</span>
+                Insights
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+                <div class="avatar">P</div>
+
+                <div>
+                    <strong>Community Admin</strong>
+                    <small>Colony Manager</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <div class="community-page">
+
+            <div class="community-header">
+
+                <small>COMMUNITY CENTER</small>
+
+                <h1>Community</h1>
+
+                <p>
+                    A central view of activity and reported issues
+                    across your community.
+                </p>
+
+            </div>
+
+
+            <div class="community-grid">
+
+                <!-- ISSUES -->
+
+                <div class="community-card">
+
+                    <h2>Recent Community Activity</h2>
+
+                    <p class="community-card-sub">
+                        Latest issues reported by residents
+                    </p>
+
+                    {% if issues %}
+
+                        {% for issue in issues %}
+
+                        <div class="issue-item">
+
+                            <div>
+
+                                <div class="issue-title">
+                                    {{ issue["title"] }}
+                                </div>
+
+                                <div class="issue-location">
+                                    📍 {{ issue["location"] }}
+                                </div>
+
+                            </div>
+
+                            {% if issue["status"] == "Pending" %}
+
+                                <span class="issue-status pending">
+                                    Pending
+                                </span>
+
+                            {% elif issue["status"] == "In Progress" %}
+
+                                <span class="issue-status progress">
+                                    In Progress
+                                </span>
+
+                            {% else %}
+
+                                <span class="issue-status resolved">
+                                    Resolved
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="empty-community">
+
+                            <strong>No community activity yet</strong>
+
+                            Residents can start by reporting an issue.
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="community-card">
+
+                    <h2>Quick Actions</h2>
+
+                    <p class="community-card-sub">
+                        Manage your community faster
+                    </p>
+
+                    <div class="community-actions">
+
+                        <a href="/report" class="community-action">
+                            <strong>＋ Report an Issue</strong>
+                            <span>
+                                Submit a new community problem
+                            </span>
+                        </a>
+
+                        <a href="/dashboard" class="community-action">
+                            <strong>▦ Open Dashboard</strong>
+                            <span>
+                                Manage and update reports
+                            </span>
+                        </a>
+
+                        <a href="/insights" class="community-action">
+                            <strong>◌ View Smart Insights</strong>
+                            <span>
+                                Understand community patterns
+                            </span>
+                        </a>
+
+                        <a href="/ai-assistant" class="community-action">
+                            <strong>✦ Ask ColonyMind AI</strong>
+                            <span>
+                                Analyze your community data
+                            </span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

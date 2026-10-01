@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ColonyMind AI | Community Intelligence</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* ================================
+           AI ASSISTANT
+        ================================= */
+
+        .ai-page {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .ai-header {
+            margin-bottom: 28px;
+        }
+
+        .ai-header .eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            color: #7c5cff;
+            margin-bottom: 8px;
+        }
+
+        .ai-header h1 {
+            margin: 0;
+            font-size: 34px;
+            letter-spacing: -1px;
+        }
+
+        .ai-header p {
+            margin-top: 8px;
+            color: #737784;
+            font-size: 15px;
+        }
+
+        .ai-chat-card {
+            background: #ffffff;
+            border: 1px solid #e8e8ee;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 18px 50px rgba(20, 20, 40, 0.07);
+        }
+
+        .ai-chat-header {
+            padding: 22px 26px;
+            border-bottom: 1px solid #eeeeF3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-profile {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .ai-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7c5cff, #5b8cff);
+            box-shadow: 0 8px 20px rgba(124, 92, 255, 0.25);
+        }
+
+        .ai-profile h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .ai-profile p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: #8b8e98;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: #5d6370;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #39b86f;
+            box-shadow: 0 0 0 4px rgba(57, 184, 111, 0.12);
+        }
+
+        .chat-messages {
+            min-height: 390px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 28px;
+            background: #fafafd;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 11px;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            font-weight: 700;
+            background: #eeeaff;
+            color: #6c4df6;
+        }
+
+        .message-content {
+            max-width: 72%;
+        }
+
+        .message.user .message-content {
+            order: -1;
+        }
+
+        .message-bubble {
+            padding: 13px 16px;
+            border-radius: 15px;
+            background: white;
+            border: 1px solid #e9e9ef;
+            color: #30333b;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .message.user .message-bubble {
+            background: #6c4df6;
+            color: white;
+            border: none;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.ai .message-bubble {
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            margin-top: 5px;
+            font-size: 10px;
+            color: #a0a2aa;
+        }
+
+        .message.user .message-time {
+            text-align: right;
+        }
+
+        .suggestions {
+            padding: 0 28px 20px;
+            background: #fafafd;
+        }
+
+        .suggestions-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #9699a4;
+            margin-bottom: 10px;
+        }
+
+        .suggestion-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-btn {
+            border: 1px solid #e2e2e9;
+            background: white;
+            border-radius: 999px;
+            padding: 9px 14px;
+            font-size: 12px;
+            color: #555966;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .suggestion-btn:hover {
+            border-color: #7c5cff;
+            color: #6c4df6;
+            transform: translateY(-1px);
+        }
+
+        .chat-input-area {
+            padding: 20px 24px 24px;
+            border-top: 1px solid #eeeeF3;
+            background: white;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            height: 52px;
+            border: 1px solid #dedee7;
+            border-radius: 14px;
+            padding: 0 17px;
+            font-size: 14px;
+            outline: none;
+            background: #fafafd;
+            transition: 0.2s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #7c5cff;
+            box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.09);
+            background: white;
+        }
+
+        .send-btn {
+            height: 52px;
+            padding: 0 22px;
+            border: none;
+            border-radius: 14px;
+            background: #6c4df6;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .send-btn:hover {
+            background: #5939e8;
+            transform: translateY(-1px);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            color: #9295a0;
+            font-size: 12px;
+            margin: 0 0 15px 47px;
+        }
+
+        .typing span {
+            width: 5px;
+            height: 5px;
+            background: #9295a0;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-4px);
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .ai-header h1 {
+                font-size: 27px;
+            }
+
+            .ai-chat-header {
+                padding: 18px;
+            }
+
+            .chat-messages {
+                padding: 20px 16px;
+            }
+
+            .suggestions {
+                padding: 0 16px 18px;
+            }
+
+            .chat-input-area {
+                padding: 15px;
+            }
+
+            .chat-form {
+                flex-direction: column;
+            }
+
+            .chat-input,
+            .send-btn {
+                width: 100%;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-mark">C</div>
+            <span>ColonyMind AI</span>
+        </div>
+
+        <div class="sidebar-menu">
+
+            <p class="menu-title">MAIN</p>
+
+            <a href="/dashboard" class="menu-item">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="/report" class="menu-item">
+                <span>＋</span>
+                Report Issue
+            </a>
+
+            <a href="#" class="menu-item">
+                <span>◉</span>
+                Community
+            </a>
+
+            <p class="menu-title">TOOLS</p>
+
+            <a href="/ai-assistant" class="menu-item active">
+                <span>✦</span>
+                AI Assistant
+            </a>
+
+            <a href="#" class="menu-item">
+                <span>◌</span>
+                Insights
+            </a>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="profile-mini">
+
+                <div class="avatar">
+                    P
+                </div>
+
+                <div>
+                    <strong>Community Admin</strong>
+                    <small>Colony Manager</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <div class="ai-page">
+
+            <!-- PAGE HEADER -->
+
+            <div class="ai-header">
+
+                <div class="eyebrow">
+                    AI ASSISTANT
+                </div>
+
+                <h1>
+                    Community Intelligence
+                </h1>
+
+                <p>
+                    Ask ColonyMind AI about your community.
+                </p>
+
+            </div>
+
+
+            <!-- CHAT -->
+
+            <div class="ai-chat-card">
+
+
+                <!-- CHAT HEADER -->
+
+                <div class="ai-chat-header">
+
+                    <div class="ai-profile">
+
+                        <div class="ai-avatar">
+                            ✦
+                        </div>
+
+                        <div>
+                            <h3>ColonyMind AI</h3>
+                            <p>Community Intelligence Assistant</p>
+                        </div>
+
+                    </div>
+
+                    <div class="ai-status">
+                        <span class="status-dot"></span>
+                        Online
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGES -->
+
+                <div class="chat-messages" id="chatMessages">
+
+                    <!-- INITIAL AI MESSAGE -->
+
+                    <div class="message ai">
+
+                        <div class="message-avatar">
+                            ✦
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="message-bubble">
+                                Hello! 👋 I'm ColonyMind AI.
+                                Ask me about your community issues,
+                                pending reports, progress, or resolved issues.
+                            </div>
+
+                            <div class="message-time">
+                                Just now
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TYPING -->
+
+                    <div class="typing" id="typingIndicator">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                        ColonyMind AI is thinking...
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUGGESTIONS -->
+
+                <div class="suggestions">
+
+                    <div class="suggestions-title">
+                        TRY ASKING
+                    </div>
+
+                    <div class="suggestion-list">
+
+                        <button
+                            type="button"
+                            class="suggestion-btn"
+                            onclick="askQuestion('How many issues are pending?')">
+                            Pending issues
+                        </button>
+
+                        <button
+                            type="button"
+                            class="suggestion-btn"
+                            onclick="askQuestion('How many issues are resolved?')">
+                            Resolved issues
+                        </button>
+
+                        <button
+                            type="button"
+                            class="suggestion-btn"
+                            onclick="askQuestion('Give me a community overview')">
+                            Community overview
+                        </button>
+
+                        <button
+                            type="button"
+                            class="suggestion-btn"
+                            onclick="askQuestion('Show me all community issues')">
+                            Show all issues
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INPUT -->
+
+                <div class="chat-input-area">
+
+                    <form
+                        class="chat-form"
+                        id="chatForm"
+                    >
+
+                        <input
+                            type="text"
+                            id="chatInput"
+                            class="chat-input"
+                            placeholder="Ask about your community..."
+                            autocomplete="off"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="send-btn"
+                            id="sendButton"
+                        >
+                            Send →
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatMessages = document.getElementById("chatMessages");
+    const sendButton = document.getElementById("sendButton");
+    const typingIndicator = document.getElementById("typingIndicator");
+
+
+    function getCurrentTime() {
+
+        return new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+
+    }
+
+
+    function addMessage(message, type) {
+
+        const wrapper = document.createElement("div");
+
+        wrapper.className = "message " + type;
+
+        const avatar = document.createElement("div");
+
+        avatar.className = "message-avatar";
+
+        avatar.textContent = type === "ai" ? "✦" : "P";
+
+
+        const content = document.createElement("div");
+
+        content.className = "message-content";
+
+
+        const bubble = document.createElement("div");
+
+        bubble.className = "message-bubble";
+
+        bubble.textContent = message;
+
+
+        const time = document.createElement("div");
+
+        time.className = "message-time";
+
+        time.textContent = getCurrentTime();
+
+
+        content.appendChild(bubble);
+
+        content.appendChild(time);
+
+        wrapper.appendChild(avatar);
+
+        wrapper.appendChild(content);
+
+
+        chatMessages.insertBefore(
+            wrapper,
+            typingIndicator
+        );
+
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+
+    function askQuestion(question) {
+
+        chatInput.value = question;
+
+        chatInput.focus();
+
+    }
+
+
+    chatForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+
+        const question =
+            chatInput.value.trim();
+
+
+        if (!question) {
+            return;
+        }
+
+
+        addMessage(question, "user");
+
+
+        chatInput.value = "";
+
+        sendButton.disabled = true;
+
+        typingIndicator.style.display = "flex";
+
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+
+        try {
+
+            const response = await fetch(
+                "/api/ai-assistant",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        question: question
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            typingIndicator.style.display = "none";
+
+
+            if (data.answer) {
+
+                addMessage(
+                    data.answer,
+                    "ai"
+                );
+
+            } else {
+
+                addMessage(
+                    "I couldn't process that request right now. Please try again.",
+                    "ai"
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            typingIndicator.style.display = "none";
+
+            addMessage(
+                "I'm having trouble connecting to the community intelligence service. Please try again.",
+                "ai"
+            );
+
+        }
+
+
+        sendButton.disabled = false;
+
+        chatInput.focus();
+
+    });
+
+</script>
+
+</body>
+</html>
